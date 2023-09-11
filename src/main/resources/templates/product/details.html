@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{parts.html :: head(${p.nazwa})}"><title></title></head>
+<body>
+<div th:replace="~{parts.html :: navbar(page = 'product')}"></div>
+<div class="container">
+
+    <div class="row">
+        <div class="col-6"><h5 class="float-end">Nazwa:</h5></div>
+        <div class="col-6"><h5 th:text="${p.nazwa}"></h5></div>
+    </div>
+
+    <div class="row">
+        <div class="col-6"><h5 class="float-end">Cena:</h5></div>
+        <div class="col-6"><h5 th:text="${p.cena}"></h5></div>
+    </div>
+
+    <div class="row">
+        <div class="col-6"><h5 class="float-end">Rodzaj:</h5></div>
+        <div class="col-6"><h5 th:text="${p.rodzaj}"></h5></div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <h5>Opis:</h5>
+            <p th:text="${p.opis}">
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-11">
+            <button onclick="window.history.back()" class="btn btn-dark">Cofnij</button>
+            <a th:href="@{/product/edit/{id}(id=${p.id})}" class="btn btn-primary">Edytuj</a>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

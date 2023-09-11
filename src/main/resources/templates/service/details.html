@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{parts.html :: head('service')}"><title></title></head>
+<body>
+<div th:replace="~{parts.html :: navbar}"></div>
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+            <form>
+
+                <div class="mb-3">
+                    <label for="Nazwa" class="form-label">Nazwa</label>
+                    <input type="text" class="form-control" id="Nazwa">
+                </div>
+                <div class="mb-3">
+                    <label for="Cena" class="form-label">Cena</label>
+                    <input type="text" class="form-control" id="Cena">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Zaloguj</button>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+
+
+</body>
+</html>

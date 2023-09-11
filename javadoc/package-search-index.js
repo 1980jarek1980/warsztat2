@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.example.warsztatsamochodowy"},{"l":"com.example.warsztatsamochodowy.controller"},{"l":"com.example.warsztatsamochodowy.dto"},{"l":"com.example.warsztatsamochodowy.entity"},{"l":"com.example.warsztatsamochodowy.repository"},{"l":"com.example.warsztatsamochodowy.service"}];updateSearchResults();

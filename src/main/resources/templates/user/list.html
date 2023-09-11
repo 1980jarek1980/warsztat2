@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{parts.html :: head('Lista '+${type})}"><title></title></head>
+<body>
+<div th:replace="~{parts.html :: navbar(page = ${page})}"></div>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h3>Lista <span th:text="${type}"></span></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-primary" th:href="@{/worker/new}" th:if="${type == 'pracowników'}">
+                Dodaj nowego pracownika
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nazwa</th>
+                    <th scope="col">Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user,iter: ${list}">
+                    <th scope="row" th:text="${iter.index+1}">1</th>
+                    <td>
+                        <a th:href="@{/user/details/{id}(id=${user.id})}" th:text="${user.getMainName()}"></a>
+                    </td>
+                    <td th:text="${user.email}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

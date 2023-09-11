@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{parts.html :: head('Szczegóły zamówienia')}"><title></title></head>
+<body>
+<div th:replace="~{parts.html :: navbar(page = 'order_details')}"></div>
+
+<!--tabela usług i produktów<br/>-->
+<!--wybór pracowników<br/>-->
+<!--i inne pola<br/>-->
+
+<div class="container">
+
+    <div class="row">
+        <div class="col"><h5 class="float-end">Sygnatura:</h5></div>
+        <div class="col"><h5 th:text="${order.sygnaturaZamowienia}"></h5></div>
+    </div>
+    <div class="row">
+        <div class="col"><h5 class="float-end">VIN samochodu:</h5></div>
+        <div class="col">
+            <h5 th:if="${order.car != null}" th:text="${order.car.vin}"></h5>
+            <h5 th:if="${order.car == null}">Brak samochodu</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col"><h5 class="float-end">Klient:</h5></div>
+        <div class="col">
+            <h5 th:if="${order.car != null}" th:text="${order.car.owner.getMainName()}">Jan Nowak</h5>
+            <h5 th:if="${order.car == null}">Brak samochodu</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col"><h5 class="float-end">Pracownicy:</h5></div>
+        <div class="col">
+            <h5 th:if="${order.pracownicy.size() > 0}">
+                <span th:each="p: ${order.pracownicy}" th:text="${p.getMainName()}+', '"></span>
+            </h5>
+            <h5 th:if="${order.pracownicy.size() == 0}">brak</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col"><h5 class="float-end">Roboczogodziny:</h5></div>
+        <div class="col"><h5 th:text="${order.liczbaRoboczogodzin}"></h5></div>
+    </div>
+    <div class="row">
+        <div class="col"><h5 class="float-end">Cena:</h5></div>
+        <div class="col"><h5 th:text="${#numbers.formatDecimal(order.getPrice(), 1, 'POINT', 2, 'COMMA')}+' zł'"></h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col"><h5 class="float-end">Faktura:</h5></div>
+        <div class="col"><h5><a th:href="@{/order/invoice/{id}(id=${order.id})}">Pobierz</a></h5></div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-dark" th:href="@{/order/list}">Cofnij</a>
+            <a class="btn btn-success" th:href="@{/service/new/{id}(id=${order.id})}">
+                Dodaj nową usługę
+            </a>
+            <a class="btn btn-primary" th:href="@{/order/edit/{id}(id=${order.id})}">
+                Edytuj
+            </a>
+        </div>
+    </div>
+
+    <div class="row" th:if="${order.services.isEmpty()}">
+        <div class="col">
+            <h4>Brak usług</h4>
+        </div>
+    </div>
+
+    <th:block th:if="${!order.services.isEmpty()}">
+        <div class="row mt-3">
+            <div class="col">
+                <h3>Lista usług</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nazwa</th>
+                        <th scope="col">Część</th>
+                        <th scope="col">Liczba sztuk</th>
+                        <th scope="col">Cena</th>
+                        <th scope="col">Akcje</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="s, iter: ${order.services}">
+                        <th scope="row" th:text="${iter.index+1}"></th>
+                        <td th:text="${s.nazwa}"></td>
+                        <td th:if="${s.product == null}"></td>
+                        <td th:if="${s.product != null}">
+                            <a th:href="@{/product/details/{id}(id=${s.product.id})}" th:text="${s.product.nazwa}"></a>
+                        </td>
+                        <td th:text="${s.count}"></td>
+                        <td th:text="${#numbers.formatDecimal(s.cena, 1, 'POINT', 2, 'COMMA')}+' zł'"></td>
+                        <td>
+                            <a th:href="@{/service/edit/{id}(id=${s.id})}" class="btn btn-primary">Edytuj</a>
+                        </td>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col">
+                <h3>Lista towarów</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nazwa</th>
+                        <th scope="col">Cena</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="p,iter: ${products}" th:if="${p != null}">
+                        <th scope="row" th:text="${iter.index} + 1">1</th>
+                        <td th:text="${p.nazwa}"></td>
+                        <td th:text="${#numbers.formatDecimal(p.cena, 1, 'POINT', 2, 'COMMA')}+' zł'"></td>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </th:block>
+</div>
+
+
+</body>
+</html>

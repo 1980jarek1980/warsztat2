@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{parts.html :: head('Lista zamówień')}"><title></title></head>
+<body>
+<div th:replace="~{parts.html :: navbar(page = 'order_list')}"></div>
+<div class="container">
+    <div class="row">
+        <div class="col"><h3>Zamówienia</h3></div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-primary" th:href="@{/order/new}">
+                Dodaj nowe zamówienie
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Sygnatura</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Samochód</th>
+                    <th scope="col">Cena</th>
+                    <th scope="col">Data rozpoczęcia</th>
+                    <th scope="col">Data zakończenia</th>
+                    <th scope="col">Faktura</th>
+                    <th scope="col">Klient</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="o,iter: ${orders}">
+                    <th scope="row" th:text="${iter.index + 1}">1</th>
+
+                    <td><a th:href="@{/order/details/{id}(id=${o.id})}" th:text="${o.sygnaturaZamowienia}"></a></td>
+                    <td><a th:href="@{/order/details/{id}(id=${o.id})}" th:text="${o.status.getStatusName()}"></a></td>
+                    <td><a th:href="@{/car/details/{id}(id=${o.car.id})}" th:text="${o.car.vin}+' '+${o.car.marka}+' '+${o.car.model}"></a></td>
+                    <td><a th:href="@{/order/details/{id}(id=${o.id})}" th:text="${#numbers.formatDecimal(o.getPrice(), 1, 'POINT', 2, 'COMMA')}+' zł'"></a></td>
+                    <td><a th:text="${o.dataRozpoczecia}"></a></td>
+                    <td><a th:text="${o.dataZakonczenia}"></a></td>
+                    <td><a th:text="${o.faktura}"></a></td>
+                    <td><a th:href="@{/user/details/{id}(id=${o.car.owner.id})}" th:text="${o.car.owner.getMainName()}"></a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

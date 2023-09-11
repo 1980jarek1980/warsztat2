@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{parts.html :: head('Panel użytkownika')}"><title></title></head>
+<body>
+<div th:replace="~{parts.html :: navbar(page = 'user_panel')}"></div>
+<div class="container">
+
+    <div class="row" th:if="${org != null}">
+        <div class="col-6"><h5 class="float-end">Nazwa:</h5></div>
+        <div class="col-6"><h5 th:text="${org.nazwa}"></h5></div>
+    </div>
+    <div class="row" th:if="${worker != null}">
+        <div class="col-6"><h5 class="float-end">Imię i nazwisko:</h5></div>
+        <div class="col-6"><h5 th:text="${worker.imie} + ' ' + ${worker.nazwisko}"></h5></div>
+    </div>
+    <div class="row" th:if="${person != null}">
+        <div class="col-6"><h5 class="float-end">Imię i nazwisko:</h5></div>
+        <div class="col-6"><h5 th:text="${person.imie} + ' ' + ${person.nazwisko}"></h5></div>
+    </div>
+    <div class="row" th:if="${worker != null}">
+        <div class="col-6"><h5 class="float-end">PESEL</h5></div>
+        <div class="col-6"><h5 th:text="${worker.pesel}"></h5></div>
+    </div>
+    <div class="row" th:if="${person != null}">
+        <div class="col-6"><h5 class="float-end">PESEL</h5></div>
+        <div class="col-6"><h5 th:text="${person.pesel}"></h5></div>
+    </div>
+    <div class="row">
+        <div class="col-6"><h5 class="float-end">Adres</h5></div>
+        <div class="col-6"><h5 th:text="${user.adres}"></h5></div>
+    </div>
+    <div class="row">
+        <div class="col-6"><h5 class="float-end">Numer telefonu</h5></div>
+        <div class="col-6"><h5 th:text="${user.telefon}">12345678</h5></div>
+    </div>
+    <div class="row">
+        <div class="col-6"><h5 class="float-end">Email</h5></div>
+        <div class="col-6"><h5 th:text="${user.email}">asd@wp.pl</h5></div>
+    </div>
+    <div class="row" th:if="${worker != null}">
+        <div class="col-6"><h5 class="float-end">Data urodzenia</h5></div>
+        <div class="col-6"><h5 th:text="${worker.dataurodzenia}"></h5></div>
+    </div>
+    <div class="row" th:if="${worker != null}">
+        <div class="col-6"><h5 class="float-end">Stanowisko pracy</h5></div>
+        <div class="col-6"><h5 th:text="${worker.stanowiskopracy}"></h5></div>
+    </div>
+    <div class="row" th:if="${person != null}">
+        <div class="col-6"><h5 class="float-end">NIP</h5></div>
+        <div class="col-6"><h5 th:text="${person.nip}"></h5></div>
+    </div>
+    <div class="row" th:if="${org != null}">
+        <div class="col-6"><h5 class="float-end">NIP</h5></div>
+        <div class="col-6"><h5 th:text="${org.nip}"></h5></div>
+    </div>
+    <div class="row" th:if="${org != null}">
+        <div class="col-6"><h5 class="float-end">REGON</h5></div>
+        <div class="col-6"><h5 th:text="${org.regon}"></h5></div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-dark" onclick="history.back()">Cofnij</button>
+            <a th:href="@{/user/edit/{id}(id=${user.id})}" class="btn btn-primary">Edycja</a>
+        </div>
+    </div>
+
+    <th:block sec:authorize="hasRole('ROLE_ADMIN')" th:if="${user.cars.size() != 0}">
+        <div class="row">
+            <div class="col">
+                <h5>Lista samochodów</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">VIN</th>
+                        <th scope="col">Numer rejestracyjny</th>
+                        <th scope="col">Marka</th>
+                        <th scope="col">Model</th>
+                        <th scope="col">Rok produkcji</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="c,iter: ${user.cars}">
+                        <th scope="row" th:text="${iter.index+1}">1</th>
+                        <td>
+                            <a th:href="@{/car/details/{id}(id=${c.id})}" th:text="${c.vin}"></a>
+                        </td>
+                        <td>
+                            <a th:href="@{/car/details/{id}(id=${c.id})}" th:text="${c.numerRejestracyjny}"></a>
+                        </td>
+                        <td>
+                            <a th:href="@{/car/details/{id}(id=${c.id})}" th:text="${c.marka}"></a>
+                        </td>
+                        <td>
+                            <a th:href="@{/car/details/{id}(id=${c.id})}" th:text="${c.model}"></a>
+                        </td>
+                        <td>
+                            <a th:href="@{/car/details/{id}(id=${c.id})}" th:text="${c.rok}"></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </th:block>
+
+    <th:block sec:authorize="hasRole('ROLE_ADMIN')" th:if="${worker != null}">
+        <div class="row">
+            <div class="col">
+                <h5>Lista zamówień</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Sygnatura</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Samochód</th>
+                        <th scope="col">Cena</th>
+                        <th scope="col">Data rozpoczęcia</th>
+                        <th scope="col">Data zakończenia</th>
+                        <th scope="col">Faktura</th>
+                        <th scope="col">Klient</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="o,iter: ${worker.zamowienia}">
+                        <th scope="row" th:text="${iter.index + 1}">1</th>
+
+                        <td><a th:href="@{/order/details/{id}(id=${o.id})}" th:text="${o.sygnaturaZamowienia}"></a></td>
+                        <td><a th:href="@{/order/details/{id}(id=${o.id})}" th:text="${o.status.getStatusName()}"></a></td>
+                        <td><a th:href="@{/car/details/{id}(id=${o.car.id})}" th:text="${o.car.vin}+' '+${o.car.marka}+' '+${o.car.model}"></a></td>
+                        <td><a th:href="@{/order/details/{id}(id=${o.id})}" th:text="${#numbers.formatDecimal(o.getPrice(), 1, 'POINT', 2, 'COMMA')}+' zł'"></a></td>
+                        <td><a th:text="${o.dataRozpoczecia}"></a></td>
+                        <td><a th:text="${o.dataZakonczenia}"></a></td>
+                        <td><a th:text="${o.faktura}"></a></td>
+                        <td><a th:href="@{/user/details/{id}(id=${o.car.owner.id})}" th:text="${o.car.owner.getMainName()}"></a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </th:block>
+</div>
+
+
+</body>
+</html>

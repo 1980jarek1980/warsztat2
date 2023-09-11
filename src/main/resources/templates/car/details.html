@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{parts.html :: head('Szczegóły samochodu')}"><title></title></head>
+<body>
+<div th:replace="~{parts.html :: navbar(page = 'car_details')}"></div>
+<div class="container">
+
+  <div class="row">
+    <div class="col-3"><h5 class="float-end">Marka i model:</h5></div>
+    <div class="col-3"><h5 th:text="${car.marka} + ' ' + ${car.model}">QWERTYY</h5></div>
+  </div>
+
+  <div class="row">
+    <div class="col-3"><h5 class="float-end">VIN samochodu:</h5></div>
+    <div class="col-3"><h5 th:text="${car.vin}">ASDFGGH</h5></div>
+  </div>
+
+  <div class="row">
+    <div class="col-3"><h5 class="float-end">Kolor:</h5></div>
+    <div class="col-3"><h5 th:text="${car.kolor}">ASDFGGH</h5></div>
+  </div>
+
+  <div class="row">
+    <div class="col-3"><h5 class="float-end">Przebieg:</h5></div>
+    <div class="col-3"><h5 th:text="${car.przebieg}">ASDFGGH</h5></div>
+  </div>
+
+  <div class="row">
+    <div class="col-3"><h5 class="float-end">Generacja:</h5></div>
+    <div class="col-3"><h5 th:text="${car.generacja}">ASDFGGH</h5></div>
+  </div>
+
+  <div class="row">
+    <div class="col-3"><h5 class="float-end">Rok produkcji:</h5></div>
+    <div class="col-3"><h5 th:text="${car.rok}">ASDFGGH</h5></div>
+  </div>
+
+  <div class="row">
+    <div class="col-3"><h5 class="float-end">Numer rejestracyjny:</h5></div>
+    <div class="col-3"><h5 th:text="${car.numerRejestracyjny}">ASDFGGH</h5></div>
+  </div>
+
+  <div class="row">
+    <div class="col-3"><h5 class="float-end">Typ podwozia:</h5></div>
+    <div class="col-3"><h5 th:text="${car.typPodwozia}">ASDFGGH</h5></div>
+  </div>
+
+  <div class="row">
+    <div class="col-3"><h5 class="float-end">Rodzaj paliwa:</h5></div>
+    <div class="col-3"><h5 th:text="${car.rodzajPaliwa}">ASDFGGH</h5></div>
+  </div>
+
+  <div class="row">
+    <div class="col-3"><h5 class="float-end">Właściciel:</h5></div>
+    <div class="col-3" th:if="${car.owner == null}"><h5>brak</h5></div>
+    <div class="col-3" th:if="${car.owner != null}"><h5 th:text="${car.owner.getMainName()}"></h5></div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button onclick="window.history.back()" class="btn btn-dark">Cofnij</button>
+      <a th:href="@{/car/edit/{id}(id=${car.id})}" class="btn btn-primary">Edycja</a>
+    </div>
+  </div>
+  <div class="row mt-3">
+<!--    TODO-->
+    <div class="col">
+      <h3>Lista wykonanych usług</h3>
+      <h5 th:if="${services.isEmpty()}">Brak</h5>
+      <table class="table" th:if="${!services.isEmpty()}">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nazwa</th>
+          <th scope="col">Cena</th>
+          <th scope="col">Zamówienie</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="s,iter: ${services}">
+          <th scope="row" th:text="${iter.index+1}">1</th>
+          <td th:text="${s.nazwa}">Mark</td>
+          <td th:text="${s.cena}">Otto</td>
+          <td><a th:href="@{/order/details/{id}(id=${s.order.id})}" th:text="${s.order.sygnaturaZamowienia}"></a></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <!--    TODO-->
+    <div class="col">
+      <h3>Lista części</h3>
+      <h5 th:if="${products.isEmpty()}">Brak</h5>
+      <table class="table" th:if="${!products.isEmpty()}">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nazwa</th>
+          <th scope="col">Cena</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p,iter: ${products}">
+          <th scope="row">1</th>
+          <td th:text="${p.nazwa}">Mark</td>
+          <td th:text="${#numbers.formatDecimal(p.cena, 1, 'POINT', 2, 'COMMA')}+' zł'">Otto</td>
+          <td><a th:href="@{/product/details/{id}(id=${p.id})}" class="btn btn-primary">Szczegóły</a></td>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>

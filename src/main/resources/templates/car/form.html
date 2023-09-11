@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{parts.html :: head('Formularz')}"><title></title></head>
+<body>
+<div th:replace="~{parts.html :: navbar(page = 'car_form')}"></div>
+<div class="container pt-3 pb-3">
+    <form th:action="@{/car/save}" th:object="${car}" method="post">
+        <div class="row">
+            <div class="col">
+
+                <input type="hidden" th:field="*{id}">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                <div class="form-group" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER')">
+                    <label for="owner">Example select</label>
+                    <select class="form-control" id="owner" th:field="*{user}">
+                        <option value="">Wybierz klienta...</option>
+                        <option th:each="p : ${persons}" th:value="${p.id}"
+                                th:attrappend="selected=${car.user!=null && car.user.id == p.id}?'selected'"
+                                th:text="'Osoba fizyczna: '+${p.imie}+' '+${p.nazwisko}"></option>
+                        <option th:each="o : ${orgs}" th:value="${o.id}"
+                                th:attrappend="selected=${car.user!=null && car.user.id == o.id}?'selected'"
+                                th:text="'Osoba prawna: '+${o.nazwa}"></option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="Marka" class="form-label">Marka*</label>
+                    <input type="text" class="form-control" id="Marka" th:field="*{marka}">
+                </div>
+                <div class="mb-3">
+                    <label for="Model" class="form-label">Model*</label>
+                    <input type="text" class="form-control" id="Model" th:field="*{model}">
+                </div>
+                <div class="mb-3">
+                    <label for="Generacja" class="form-label">Generacja</label>
+                    <input type="number" class="form-control" id="Generacja" th:field="*{generacja}">
+                </div>
+                <div class="mb-3">
+                    <label for="Przebieg" class="form-label">Przebieg</label>
+                    <input type="number" class="form-control" id="Przebieg" th:field="*{przebieg}">
+                </div>
+                <div class="mb-3">
+                    <label for="Vin" class="form-label">VIN*</label>
+                    <input type="text" class="form-control" id="Vin" th:field="*{vin}">
+                </div>
+                <div class="mb-3">
+                    <label for="RokProdukcji" class="form-label">Rok Produkcji</label>
+                    <input type="number" min="0" class="form-control" id="RokProdukcji" th:field="*{rok}">
+                </div>
+                <div class="mb-3">
+                    <label for="NumerRejestracyjny" class="form-label">Numer rejestracyjny*</label>
+                    <input type="text" class="form-control" id="NumerRejestracyjny"
+                           th:field="*{numerRejestracyjny}">
+                </div>
+                <div class="mb-3">
+                    <label for="Typ" class="form-label">Typ pojazdu</label>
+                    <input type="text" class="form-control" id="Typ" th:field="*{typPodwozia}">
+                </div>
+                <div class="mb-3">
+                    <label for="Kolor" class="form-label">Kolor</label>
+                    <input type="text" class="form-control" id="Kolor" th:field="*{kolor}">
+                </div>
+                <div class="mb-3">
+                    <label for="RodzajPaliwa" class="form-label">Rodzaj paliwa</label>
+                    <input type="text" class="form-control" id="RodzajPaliwa" th:field="*{rodzajPaliwa}">
+                </div>
+
+                <span>* Pola wymagane</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12" th:if="${car.id < 1}">
+                <button onclick="window.history.back()" class="btn btn-dark">Cofnij</button>
+                <button type="submit" class="btn btn-primary">Zapisz</button>
+            </div>
+
+            <th:block th:if="${car.id > 0}">
+                <div class="col-11">
+                    <button onclick="window.history.back()" class="btn btn-dark">Cofnij</button>
+                    <button type="submit" class="btn btn-primary">Zapisz</button>
+                </div>
+                <div class="col-1">
+                    <a th:href="@{/car/delete/{id}(id=${car.id})}" class="btn btn-danger">Usuń</a>
+                </div>
+            </th:block>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

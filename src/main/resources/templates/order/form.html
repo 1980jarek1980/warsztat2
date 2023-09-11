@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{parts.html :: head('Formularz zamówienia')}"><title></title></head>
+<body>
+<div th:replace="~{parts.html :: navbar(page = 'order_form')}"></div>
+<div class="container pt-3 pb-3">
+
+    <form th:action="@{/order/save}" th:object="${order}" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col">
+
+                <input type="hidden" th:field="*{id}">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                <div class="form-group">
+                    <label for="car">Samochód</label>
+                    <select class="form-control" id="car" th:field="*{car}">
+                        <option value="">Wybierz samochód...</option>
+                        <option th:each="c : ${cars}" th:value="${c.id}"
+                                th:attrappend="selected=${order.car != null && order.car.id == c.id}?'selected'"
+                                th:text="${c.owner.getMainName()} +': ' + ${c.vin}+' '+${c.marka}+' '+${c.model}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <label for="workers">Pracownicy</label>
+                    <select multiple class="form-control" id="workers" th:field="*{pracownicy}">
+                        <option th:each="w : ${workers}" th:value="${w.id}"
+                                th:attrappend="selected=${order.pracownicy.contains(w)}?'selected'"
+                                th:text="${w.getMainName()}"></option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="signature" class="form-label">Sygnatura*</label>
+                    <input type="text" class="form-control" id="signature" th:field="*{sygnaturaZamowienia}">
+                </div>
+                <div class="mb-3">
+                    <label for="hours" class="form-label">Roboczogodziny*</label>
+                    <input type="number" step="any" class="form-control" id="hours" th:field="*{liczbaRoboczogodzin}">
+                </div>
+                <div class="mb-3">
+                    <label for="startDate" class="form-label">Data rozpoczęcia</label>
+                    <input type="date" class="form-control" id="startDate" th:field="*{dataRozpoczecia}">
+                </div>
+                <div class="mb-3">
+                    <label for="endDate" class="form-label">Data zakończenia</label>
+                    <input type="date" class="form-control" id="endDate" th:field="*{dataZakonczenia}">
+                </div>
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-control" id="status" th:field="*{status}">
+                        <option th:each="s : ${statuses}" th:value="${s}"
+                                th:attrappend="selected=${order.status == s}?'selected'"
+                                th:text="${s.getStatusName()}"></option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="invoice" class="form-label">Faktura</label>
+                    <input type="file" class="form-control" id="invoice" th:field="*{invoice}">
+                    <a th:href="@{/order/invoice/{id}(id=${order.id})}" th:if="${order.faktura != null}">Pobierz fakturę</a>
+                </div>
+
+                <span>* Pola wymagane</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <button onclick="window.history.back()" class="btn btn-dark">Cofnij</button>
+                <button type="submit" class="btn btn-primary">Zapisz</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+</body>
+</html>

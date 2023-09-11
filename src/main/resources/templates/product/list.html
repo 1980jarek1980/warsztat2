@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{parts.html :: head('Strona główna')}"><title></title></head>
+<body>
+<div th:replace="~{parts.html :: navbar(page = 'index')}"></div>
+<div class="container">
+
+    <div class="row">
+        <div class="col mt-3 mb-3">
+            <a th:href="@{/product/new}" class="btn btn-primary">
+                Nowy product
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="card" th:each="p: ${list}" style="width: 18rem; float:left">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${p.nazwa}"></h5>
+                    <h5 class="card-text">Cena: <span th:text="${#numbers.formatCurrency(p.cena)}"></span></h5>
+                    <p class="card-text" th:text="${p.opis}"></p>
+                    <a th:href="@{/product/details/{id}(id=${p.id})}" class="btn btn-primary">Szczegóły</a>
+                </div>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
